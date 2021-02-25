@@ -1,0 +1,11 @@
+development:
+  dialect: postgres
+  datasource: host=localhost dbname=tf-manifest user=postgres password=postgres sslmode=disable
+  dir: migrations/postgres
+  table: migrations
+
+production:
+  dialect: postgres
+  datasource: host=${POSTGRES_HOST} dbname=${POSTGRES_DB} user=${POSTGRES_USER} password=${POSTGRES_PASSWORD} sslmode=disable
+  dir: migrations/postgres
+  table: migrations
