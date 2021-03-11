@@ -2,6 +2,7 @@ package http
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -15,6 +16,8 @@ const ShutdownTimeout = 1 * time.Second
 
 // Server represents an HTTP server and wraps all HTTP functionality
 type Server struct {
+	Addr string
+
 	router chi.Router
 	server *http.Server
 
@@ -34,21 +37,20 @@ func NewServer() *Server {
 	s.router.Use(middleware.Logger)
 	s.router.Use(middleware.Recoverer)
 
+	// TODO: other middleware (jwt auth, etc...)
+
 	// TODO:
 	// - serve embedded assets ?
-	// - metrics?
 	// - not found handler
 	// - auth
+	// - request validation
 
-	// testing only
-	s.router.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello world"))
-	})
+	// register unauthenticated routes routes (auth routes for login, etc.)
+	s.registerUserRoutes()
 
-	// register other routes
+	// register authenticated routes
 
-	// TODO: Port!
-	s.server.Addr = ":8080"
+	s.server.Addr = s.Addr
 	s.server.Handler = s.router
 
 	return s
@@ -56,8 +58,11 @@ func NewServer() *Server {
 
 // Open begins listening for requests
 func (s *Server) Open() (err error) {
-	// TODO: - Initialize our secure cookie with our encryption keys?
-	// TODO: port?
+	if s.Addr == "" {
+		return fmt.Errorf("server port not set")
+	}
+
+	s.server.Addr = s.Addr
 
 	go s.server.ListenAndServe()
 

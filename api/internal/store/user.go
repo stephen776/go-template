@@ -1,21 +1,19 @@
 package store
 
 import (
-	"github.com/jmoiron/sqlx"
-
 	"bitbucket.org/truefit/tf-manifest/pkg/models"
 )
 
 // UserService performs DB operations against the users table
 type UserService struct {
-	db *sqlx.DB
+	db *DB
 }
 
 // GetUsers returns all users
-func (s *UserService) GetUsers() ([]models.User, error) {
-	users := []models.User{}
+func (s *UserService) GetUsers() ([]*models.User, error) {
+	users := make([]*models.User, 0)
 
-	err := s.db.Select(&users, "SELECT * FROM users")
+	err := s.db.client.Select(&users, "SELECT * FROM users")
 	if err != nil {
 		return nil, err
 	}
@@ -24,6 +22,6 @@ func (s *UserService) GetUsers() ([]models.User, error) {
 }
 
 // NewUserService creates a new instance of the UserRepository
-func NewUserService(db *sqlx.DB) *UserService {
+func NewUserService(db *DB) *UserService {
 	return &UserService{db}
 }

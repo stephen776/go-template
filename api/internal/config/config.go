@@ -6,11 +6,15 @@ import (
 
 // Config defines static configuration for app
 type Config struct {
+	// DB
 	DBHost string `mapstructure:"POSTGRES_HOST"`
 	DBPort int `mapstructure:"POSTGRES_PORT"`
 	DBName string `mapstructure:"POSTGRES_DBNAME"`
 	DBUser string `mapstructure:"POSTGRES_USER"`
 	DBPass string `mapstructure:"POSTGRES_PASS"`
+
+	// HTTP Server
+	ServerPort string `mapstructure:"SERVER_PORT"`
 }
 
 // Load reads config from file or environment and return Config struct

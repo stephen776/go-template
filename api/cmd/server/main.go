@@ -13,6 +13,10 @@ import (
 	"bitbucket.org/truefit/tf-manifest/pkg/models"
 )
 
+// TODO:
+// - Auth
+// - request validation
+
 // Main represents our program
 type Main struct {
 	Config *config.Config
@@ -29,11 +33,11 @@ func main() {
 	// load the app config
 	config, err := config.Load(".")
 	if err != nil {
-		log.Fatal("cannot load config:", err)
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 
 	// Setup signal handlers.
-	// TODO: what else needs wired up for shutdown?
 	ctx, cancel := context.WithCancel(context.Background())
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
@@ -97,9 +101,15 @@ func (m *Main) Run(ctx context.Context) (err error) {
 
 	// server config
 
+	// instantiate services
+	userService := store.NewUserService(m.DB)
+
 	// inject services
+	m.Server.UserService = userService
 
 	// start HTTP server
+	m.Server.Addr = m.Config.ServerPort
+
 	if err := m.Server.Open(); err != nil {
 		return err
 	}
