@@ -1,7 +1,6 @@
 package http
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -31,11 +30,9 @@ func (s *Server) handleUsersIndex (w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: need a real response struct and real json encoding
-	w.Header().Set("Content-type", "application/json")
-		if err := json.NewEncoder(w).Encode(users); err != nil {
-			w.Write([]byte("oops...encoding error"))
-			return
-		}
+	if err := RenderJSON(w, 200, users); err != nil {
+		w.Write([]byte("oops...encoding error"))
+		return
+	}
 }
 

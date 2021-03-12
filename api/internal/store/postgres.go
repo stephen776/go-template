@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	_ "github.com/jackc/pgx/v4/stdlib"
 	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
 )
 
 // DB is our struct that holds a database client
@@ -33,7 +33,7 @@ func (db *DB) Open() (err error) {
 		return fmt.Errorf("dsn required to open db")
 	}
 
-	db.client, err = sqlx.Connect("postgres", db.DSN)
+	db.client, err = sqlx.Connect("pgx", db.DSN)
 
 	if err != nil {
 		return err
