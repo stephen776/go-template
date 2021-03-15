@@ -2,18 +2,21 @@ package store
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 
 	_ "github.com/jackc/pgx/v4/stdlib"
-	"github.com/jmoiron/sqlx"
 )
 
-// DB is our struct that holds a database client
+// DB is our struct that consturcts our DB connection and creates sqlc Queries object
 type DB struct {
 	// Datasource Name
 	DSN string
 
-	client  *sqlx.DB
+	// sqlc generated Queries repo
+	Queries *Queries
+
+	db *sql.DB
 	ctx     context.Context // background context
 	cancel  func()          // cancel background context
 }
@@ -21,7 +24,6 @@ type DB struct {
 // NewDB creates a new connection and returns the DB object
 func NewDB(dsn string) *DB {
 	db := &DB{ DSN: dsn}
-
 	db.ctx, db.cancel = context.WithCancel(context.Background())
 
 	return db
@@ -33,11 +35,12 @@ func (db *DB) Open() (err error) {
 		return fmt.Errorf("dsn required to open db")
 	}
 
-	db.client, err = sqlx.Connect("pgx", db.DSN)
-
+	db.db, err = sql.Open("pgx", db.DSN)
 	if err != nil {
 		return err
 	}
+
+	db.Queries = New(db.db)
 
 	return nil
 }
@@ -47,8 +50,8 @@ func (db *DB) Close() error {
 	db.cancel()
 
 	// close database
-	if db.client != nil {
-		return db.client.Close()
+	if db.db != nil {
+		return db.db.Close()
 	}
 
 	return nil

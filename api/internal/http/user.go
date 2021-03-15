@@ -23,7 +23,7 @@ func (s *Server) handleSayHello (w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) handleUsersIndex (w http.ResponseWriter, r *http.Request) {
-	users, err := s.UserService.GetUsers()
+	users, err := s.UserService.GetUsers(r.Context())
 
 	if err != nil {
 		w.Write([]byte("oops..."))

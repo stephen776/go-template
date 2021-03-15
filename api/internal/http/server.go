@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"bitbucket.org/truefit/tf-manifest/pkg/models"
+	"bitbucket.org/truefit/tf-manifest/internal/domain"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
@@ -22,7 +22,7 @@ type Server struct {
 	server *http.Server
 
 	// services
-	UserService models.UserService
+	UserService domain.UserService
 }
 
 // NewServer returns a new instance of the Server Struct

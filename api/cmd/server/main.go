@@ -8,9 +8,10 @@ import (
 	"os/signal"
 
 	"bitbucket.org/truefit/tf-manifest/internal/config"
+	"bitbucket.org/truefit/tf-manifest/internal/domain"
 	"bitbucket.org/truefit/tf-manifest/internal/http"
+	"bitbucket.org/truefit/tf-manifest/internal/services"
 	"bitbucket.org/truefit/tf-manifest/internal/store"
-	"bitbucket.org/truefit/tf-manifest/pkg/models"
 )
 
 // TODO:
@@ -26,7 +27,7 @@ type Main struct {
 	// TODO: logger?
 
 	// Services
-	UserService models.UserService
+	UserService domain.UserService
 }
 
 func main() {
@@ -102,7 +103,7 @@ func (m *Main) Run(ctx context.Context) (err error) {
 	// server config
 
 	// instantiate services
-	userService := store.NewUserService(m.DB)
+	userService := services.NewUserService(m.DB.Queries)
 
 	// inject services
 	m.Server.UserService = userService
