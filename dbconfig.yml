@@ -1,6 +1,6 @@
 development:
   dialect: postgres
-  datasource: host=localhost dbname=go-template user=postgres password=postgres sslmode=disable
+  datasource: host=${POSTGRES_HOST} port=${POSTGRES_PORT} dbname=${POSTGRES_DBNAME} user=${POSTGRES_USER} password=${POSTGRES_PASSWORD}
   dir: internal/postgres/migrations
   table: migrations
 
