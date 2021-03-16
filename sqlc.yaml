@@ -1,7 +1,7 @@
 version: '1'
 packages:
   - name: 'postgres'
-    path: 'internal/store'
+    path: 'internal/postgres'
     queries: 'internal/postgres/sql/'
     schema: 'internal/postgres/migrations/'
     engine: 'postgresql'
