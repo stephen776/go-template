@@ -11,7 +11,7 @@ type Config struct {
 	DBPort int `mapstructure:"POSTGRES_PORT"`
 	DBName string `mapstructure:"POSTGRES_DBNAME"`
 	DBUser string `mapstructure:"POSTGRES_USER"`
-	DBPass string `mapstructure:"POSTGRES_PASS"`
+	DBPass string `mapstructure:"POSTGRES_PASSWORD"`
 
 	// HTTP Server
 	ServerPort string `mapstructure:"SERVER_PORT"`

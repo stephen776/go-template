@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"bitbucket.org/truefit/tf-manifest/internal/domain"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/stephen776/go-template/internal/domain"
 )
 
 // ShutdownTimeout is the time given for outstanding requests to finish before shutdown.

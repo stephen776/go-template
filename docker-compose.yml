@@ -5,7 +5,7 @@ volumes:
 
 services:
   database:
-    container_name: manifestpostgres
+    container_name: gotemplatepostgres
     image: postgres
     restart: always
     volumes:

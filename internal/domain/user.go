@@ -3,7 +3,7 @@ package domain
 import (
 	"context"
 
-	"bitbucket.org/truefit/tf-manifest/internal/postgres"
+	"github.com/stephen776/go-template/internal/postgres"
 )
 
 // UserService defines CRUD for User model

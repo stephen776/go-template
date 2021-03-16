@@ -7,13 +7,14 @@ import (
 	"os"
 	"os/signal"
 
-	"bitbucket.org/truefit/tf-manifest/internal/config"
-	"bitbucket.org/truefit/tf-manifest/internal/domain"
-	"bitbucket.org/truefit/tf-manifest/internal/http"
-	"bitbucket.org/truefit/tf-manifest/internal/postgres"
+	"github.com/stephen776/go-template/internal/config"
+	"github.com/stephen776/go-template/internal/domain"
+	"github.com/stephen776/go-template/internal/http"
+	"github.com/stephen776/go-template/internal/postgres"
 )
 
 // TODO:
+// - run migrations on start
 // - Auth
 // - request validation
 

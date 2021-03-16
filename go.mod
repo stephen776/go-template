@@ -1,4 +1,4 @@
-module bitbucket.org/truefit/tf-manifest
+module github.com/stephen776/go-template
 
 go 1.16
 
