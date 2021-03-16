@@ -10,8 +10,7 @@ import (
 	"bitbucket.org/truefit/tf-manifest/internal/config"
 	"bitbucket.org/truefit/tf-manifest/internal/domain"
 	"bitbucket.org/truefit/tf-manifest/internal/http"
-	"bitbucket.org/truefit/tf-manifest/internal/services"
-	"bitbucket.org/truefit/tf-manifest/internal/store"
+	"bitbucket.org/truefit/tf-manifest/internal/postgres"
 )
 
 // TODO:
@@ -21,7 +20,7 @@ import (
 // Main represents our program
 type Main struct {
 	Config *config.Config
-	DB     *store.DB
+	Repo     *postgres.Repo
 	Server *http.Server
 
 	// TODO: logger?
@@ -72,7 +71,7 @@ func NewMain(config *config.Config) *Main {
 
 	return &Main{
 		Config: config,
-		DB:     store.NewDB(dsn),
+		Repo:     postgres.NewRepo(dsn),
 		Server: http.NewServer(),
 	}
 }
@@ -85,8 +84,8 @@ func (m *Main) Close() error {
 		}
 	}
 
-	if m.DB != nil {
-		if err := m.DB.Close(); err != nil {
+	if m.Repo != nil {
+		if err := m.Repo.Close(); err != nil {
 			return err
 		}
 	}
@@ -96,17 +95,16 @@ func (m *Main) Close() error {
 
 // Run starts the DB connection, injects services, runs http server
 func (m *Main) Run(ctx context.Context) (err error) {
-	if err := m.DB.Open(); err != nil {
+	if err := m.Repo.Open(); err != nil {
 		return fmt.Errorf("cannot open db: %w", err)
 	}
 
 	// server config
 
 	// instantiate services
-	userService := services.NewUserService(m.DB.Queries)
 
 	// inject services
-	m.Server.UserService = userService
+	m.Server.UserService = m.Repo
 
 	// start HTTP server
 	m.Server.Addr = m.Config.ServerPort
@@ -115,7 +113,7 @@ func (m *Main) Run(ctx context.Context) (err error) {
 		return err
 	}
 
-	log.Printf("running! dsn=%q", m.DB.DSN)
+	log.Printf("running! dsn=%q", m.Repo.DSN)
 
 	return nil
 }
